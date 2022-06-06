@@ -29,9 +29,9 @@ public class ServiceTaskImpl implements ServiceTask {
     }
 
     @Override
-    public TaskDetailResponse detail(Long id, MUser user) {
+    public TaskDetailPhotoResponse detail(Long id, MUser user) {
         MTask element = user.tasks.stream().filter(elt -> elt.id == id).findFirst().get();
-        TaskDetailResponse response = new TaskDetailResponse();
+        TaskDetailPhotoResponse response = new TaskDetailPhotoResponse();
         response.name = element.name;
         response.id = element.id;
         // calcul le temps écoulé en pourcentage
@@ -46,6 +46,12 @@ public class ServiceTaskImpl implements ServiceTask {
             transfer.timestamp = e.timestamp;
             response.events.add(transfer);
         }
+        if(element.photo != null) {
+            response.photoId = element.photo.id;
+        } else {
+            response.photoId = 0L;
+        }
+
         return response;
     }
 
@@ -88,16 +94,21 @@ public class ServiceTaskImpl implements ServiceTask {
     }
 
     @Override
-    public List<HomeItemResponse> home(Long userID) {
+    public List<HomeItemPhotoResponse> home(Long userID) {
         MUser user = repoUser.findById(userID).get();
-        List<HomeItemResponse> res = new ArrayList<>();
+        List<HomeItemPhotoResponse> res = new ArrayList<>();
         for (MTask t : user.tasks) {
-            HomeItemResponse r = new HomeItemResponse();
+            HomeItemPhotoResponse r = new HomeItemPhotoResponse();
             r.id = t.id;
             r.percentageDone = percentageDone(t);
             r.deadline = t.deadline;
             r.percentageTimeSpent = percentage(t.creationDate, new Date(), t.deadline);
             r.name = t.name;
+            if(t.photo != null) {
+                r.photoId = t.photo.id;
+            } else {
+                r.photoId = 0L;
+            }
             res.add(r);
         }
         return res;

@@ -2,9 +2,7 @@ package org.kickmyb.server.task;
 
 import org.kickmyb.server.ConfigHTTP;
 import org.kickmyb.server.account.MUser;
-import org.kickmyb.transfer.AddTaskRequest;
-import org.kickmyb.transfer.HomeItemResponse;
-import org.kickmyb.transfer.TaskDetailResponse;
+import org.kickmyb.transfer.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,7 +43,7 @@ public class ControllerTask {
 	}
 
 	@GetMapping("/api/home")
-	public @ResponseBody List<HomeItemResponse> home() {
+	public @ResponseBody List<HomeItemPhotoResponse> home() {
 		System.out.println("KICKB SERVER : Task list  with cookie" );
 		ConfigHTTP.attenteArticifielle();
 		MUser user = currentUser();
@@ -53,7 +51,8 @@ public class ControllerTask {
 	}
 
     @GetMapping("/api/detail/{id}")
-    public @ResponseBody TaskDetailResponse detail(@PathVariable long id) {
+    public @ResponseBody
+	TaskDetailPhotoResponse detail(@PathVariable long id) {
 		System.out.println("KICKB SERVER : Detail  with cookie " );
 		ConfigHTTP.attenteArticifielle();
 		MUser user = currentUser();

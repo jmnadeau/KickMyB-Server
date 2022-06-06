@@ -25,25 +25,18 @@ public class ControllerPhoto {
     @Autowired private ServicePhoto servicePhoto;
 
     @PostMapping("/file")
-    public ResponseEntity<String> up(@RequestParam("file") MultipartFile file, @RequestParam("babyID") Long babyID) throws IOException {
+    public ResponseEntity<String> up(@RequestParam("file") MultipartFile file, @RequestParam("taskID") Long taskID) throws IOException {
         System.out.println("PHOTO : upload request " + file.getContentType());
         ConfigHTTP.attenteArticifielle();
-        servicePhoto.store(file, babyID);
+        servicePhoto.store(file, taskID);
         return ResponseEntity.status(HttpStatus.OK).body("");
     }
 
-
-    // TODO delete
-    @GetMapping("/file/baby/{id}")
-    public ResponseEntity<byte[]> compat(@PathVariable Long id, @RequestParam(required = false, name = "width") Integer maxWidth) throws IOException {
-        return taskPhoto(id, maxWidth);
-    }
-
-    @GetMapping("/file/task/{id}")
+    @GetMapping("/file/{id}")
     public ResponseEntity<byte[]> taskPhoto(@PathVariable Long id, @RequestParam(required = false, name = "width") Integer maxWidth) throws IOException {
         System.out.println("PHOTO : download request " + id + " width " + maxWidth);
         ConfigHTTP.attenteArticifielle();
-        MPhoto pic = servicePhoto.getFileForTask(id);
+        MPhoto pic = servicePhoto.getFile(id);
         // TODO explain resizing logic
         if (maxWidth == null) { // no resizing
             return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(pic.blob);
