@@ -39,6 +39,18 @@ public class ServicePhoto {
         return photo;
     }
 
+    @Transactional
+    public MPhoto storeSingle(MultipartFile file) throws IOException {
+
+        MPhoto photo = new MPhoto();
+        photo.blob = file.getBytes();
+        photo.contentType = file.getContentType();
+
+        photo = repoPics.save(photo);
+
+        return photo;
+    }
+
     /*public MPhoto getFileForTask(Long elementID) {
         MTask element = repo.findById(elementID).get();
         return repoPics.findByTask(element).get();

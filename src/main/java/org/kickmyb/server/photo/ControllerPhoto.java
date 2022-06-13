@@ -51,4 +51,30 @@ public class ControllerPhoto {
             return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(bytes);
         }
     }
+
+    @PostMapping("/api/singleFile")
+    public ResponseEntity<String> upSingleCookie(@RequestParam("file") MultipartFile file) throws IOException {
+        System.out.println("PHOTO : single upload request " + file.getContentType());
+        ConfigHTTP.attenteArticifielle();
+        MPhoto p = servicePhoto.storeSingle(file);
+        return ResponseEntity.status(HttpStatus.OK).body(p.id.toString());
+    }
+
+    @GetMapping("/api/singleFile/{id}")
+    public ResponseEntity<byte[]> photoSingleCookie(@PathVariable Long id, @RequestParam(required = false, name = "width") Integer maxWidth) throws IOException {
+        return taskPhoto(id, maxWidth);
+    }
+
+    @PostMapping("/singleFile")
+    public ResponseEntity<String> upSingle(@RequestParam("file") MultipartFile file) throws IOException {
+        System.out.println("PHOTO : single upload request " + file.getContentType());
+        ConfigHTTP.attenteArticifielle();
+        MPhoto p = servicePhoto.storeSingle(file);
+        return ResponseEntity.status(HttpStatus.OK).body(p.id.toString());
+    }
+
+    @GetMapping("/singleFile/{id}")
+    public ResponseEntity<byte[]> photoSingle(@PathVariable Long id, @RequestParam(required = false, name = "width") Integer maxWidth) throws IOException {
+        return taskPhoto(id, maxWidth);
+    }
 }
